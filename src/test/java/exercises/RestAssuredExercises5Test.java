@@ -1,13 +1,17 @@
 package exercises;
 
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.path.json.JsonPath;
+import io.restassured.path.xml.XmlPath;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
+import java.util.List;
 import static io.restassured.RestAssured.given;
+import static io.restassured.matcher.RestAssuredMatchers.endsWithPath;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RestAssuredExercises5Test {
 
@@ -103,10 +107,10 @@ public class RestAssuredExercises5Test {
 	
 	@Test
 	public void checkTwoRecordsHaveBeenSetByCarsWhoseMakeEndOnBenz() {
-		
-		given().
-			spec(requestSpec).
-		when().
-		then();
+	    String response = given().spec(requestSpec).get("/xml/speedrecords").asString();
+        List<String> list = XmlPath.from(response).getList("speedRecords.car.collect{it.@make}");
+        long count = list.stream().filter(item -> item.endsWith("Benz")).count();
+
+        assertThat(count, is(2L));
 	}
 }
