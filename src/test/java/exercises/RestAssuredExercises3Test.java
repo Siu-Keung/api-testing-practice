@@ -13,6 +13,7 @@ import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static io.restassured.path.json.JsonPath.from;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 
 public class RestAssuredExercises3Test {
 
@@ -82,11 +83,13 @@ public class RestAssuredExercises3Test {
     @Test
     public void useResponseSpecification() {
 
-
         given().
                 spec(requestSpec).
                 when().
-                then();
+                get("/2014/1/circuits.json")
+                .then()
+                .spec(responseSpec)
+                .body("MRData.CircuitTable.Circuits[0].Location.locality", is("Melbourne"));
     }
 
     /*******************************************************
