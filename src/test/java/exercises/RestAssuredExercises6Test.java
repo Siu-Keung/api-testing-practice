@@ -30,20 +30,20 @@ public class RestAssuredExercises6Test {
 
 	/*******************************************************
 	 * Create a new Car object that represents a 2012 Ford Focus
-	 * POST this object to /cars/postcar
+	 * POST this object to /car/postcar
 	 * Verify that the response HTTP status code is equal to 200
 	 ******************************************************/
 
 	@Test
 	public void checkThatPostingA2012FordFocusReturnsHttp200() {
-//        Car car = new Car("Ford", "Focus", 2012);
-//		given().
-//			spec(requestSpec).log().all().
-//                body(car).
-//		when().
-//                post("/cars/postcar").
-//		then()
-//                .statusCode(200).log().all();
+        Car car = new Car("Ford", "Focus", 2012);
+		given().
+			spec(requestSpec).log().all().
+                body(car).
+		when().
+                post("/car/postcar").
+		then()
+                .statusCode(200).log().all();
 	}
 
 	/*******************************************************
