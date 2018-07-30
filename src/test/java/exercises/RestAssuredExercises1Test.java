@@ -1,6 +1,7 @@
 package exercises;
 
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
@@ -66,7 +67,9 @@ public class RestAssuredExercises1Test {
         given().
                 spec(requestSpec).
                 when().
-                then();
+                get("/2016/drivers.json").
+                then().
+                contentType(ContentType.JSON);
     }
 
     /***********************************************
