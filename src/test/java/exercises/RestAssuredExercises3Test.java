@@ -101,10 +101,12 @@ public class RestAssuredExercises3Test {
 
     @Test
     public void useExtractedDriverId() {
-
+        getNinthDriverId();
         given().
                 spec(requestSpec).
                 when().
-                then();
+                get("/drivers/" + ninthDriverId + ".json").
+                then()
+                .body("MRData.DriverTable.Drivers[0].nationality", is("German"));
     }
 }
