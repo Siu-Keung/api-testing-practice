@@ -9,7 +9,9 @@ import io.restassured.specification.ResponseSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
+import static io.restassured.path.json.JsonPath.from;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class RestAssuredExercises3Test {
@@ -64,8 +66,9 @@ public class RestAssuredExercises3Test {
 
 
     static void getNinthDriverId() {
-
-
+        String responseStr = given().spec(requestSpec)
+                .get("/2016/drivers.json").asString();
+        ninthDriverId = from(responseStr).get("MRData.DriverTable.Drivers[8].driverId");
     }
 
     /*******************************************************
@@ -78,6 +81,7 @@ public class RestAssuredExercises3Test {
 
     @Test
     public void useResponseSpecification() {
+
 
         given().
                 spec(requestSpec).
