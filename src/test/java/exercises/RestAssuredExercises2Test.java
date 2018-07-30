@@ -28,15 +28,14 @@ public class RestAssuredExercises2Test {
 			setBasePath("/api/f1").
 			build();
 	}
-	
+
 	/*******************************************************
 	 * Use junit-jupiter-params for @ParameterizedTest that
 	 * specifies in which country
-	 * a specific circuit can be found (specify that Monza 
-	 * is in Italy, for example) 
+	 * a specific circuit can be found (specify that Monza
+	 * is in Italy, for example)
 	 ******************************************************/
 
-	//todo
     static Stream<Arguments> generateCheckCountryForCircuitParam(){
         return Stream.of(
                 Arguments.of("monza", "Italy"),
@@ -47,15 +46,22 @@ public class RestAssuredExercises2Test {
 
 	/*******************************************************
 	 * Use junit-jupiter-params for @ParameterizedTest that specifies for all races
-	 * (adding the first four suffices) in 2015 how many  
+	 * (adding the first four suffices) in 2015 how many
 	 * pit stops Max Verstappen made
 	 * (race 1 = 1 pitstop, 2 = 3, 3 = 2, 4 = 2)
 	 ******************************************************/
 
-	//todo
+	static Stream<Arguments> generateCheckNumberOfPitstopsForMaxVerstappenIn2015Param(){
+	    return Stream.of(
+	            Arguments.of(1, 1),
+	            Arguments.of(2, 3),
+	            Arguments.of(3, 2),
+	            Arguments.of(4, 2)
+        );
+    }
 
 	/*******************************************************
-	 * Request data for a specific circuit (for Monza this 
+	 * Request data for a specific circuit (for Monza this
 	 * is /circuits/monza.json)
 	 * and check the country this circuit can be found in
 	 ******************************************************/
@@ -63,29 +69,32 @@ public class RestAssuredExercises2Test {
     @ParameterizedTest
     @MethodSource("generateCheckCountryForCircuitParam")
 	public void checkCountryForCircuit(String circuitId, String country) {
-		
+
 		given().
-			spec(requestSpec).
+			    spec(requestSpec).
 		when().
                 get("/circuits/" + circuitId + ".json").
 		then().
                 body("MRData.CircuitTable.Circuits[0].Location.country", is(country)).log().all();
 
 	}
-	
+
 	/*******************************************************
 	 * Request the pitstop data for the first four races in
 	 * 2015 for Max Verstappen (for race 1 this is
 	 * /2015/1/drivers/max_verstappen/pitstops.json)
 	 * and verify the number of pit stops made
 	 ******************************************************/
-	
-	@Test
-	public void checkNumberOfPitstopsForMaxVerstappenIn2015() {
-		
+
+	@ParameterizedTest
+    @MethodSource("generateCheckNumberOfPitstopsForMaxVerstappenIn2015Param")
+	public void checkNumberOfPitstopsForMaxVerstappenIn2015(int seq, int stopNums) {
+
 		given().
 			spec(requestSpec).
 		when().
-		then();
+                get("/2015/" + seq + "/drivers/max_verstappen/pitstops.json").
+		then()
+                .body("MRData.RaceTable.Races[0].PitStops.size()", is(stopNums));
 	}
 }
