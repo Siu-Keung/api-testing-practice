@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.*;
 
 
 public class RestAssuredExercises1Test {
@@ -85,7 +86,9 @@ public class RestAssuredExercises1Test {
         given().
                 spec(requestSpec).
                 when().
-                then();
+                get("/2014/1/circuits.json").
+                then()
+                .body("MRData.CircuitTable.Circuits[0].circuitId", is("albert_park")).log().all();
     }
 
     /***********************************************
