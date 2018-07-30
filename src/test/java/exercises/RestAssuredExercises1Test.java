@@ -103,7 +103,10 @@ public class RestAssuredExercises1Test {
         given().
                 spec(requestSpec).
                 when().
-                then();
+                get("/2014/circuits.json").
+                then()
+                .body("MRData.CircuitTable.season", is("2014"))
+                .and().body("MRData.CircuitTable.Circuits.circuitId", hasItem("silverstone"));
     }
 
     /***********************************************
