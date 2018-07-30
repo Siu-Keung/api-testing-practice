@@ -4,6 +4,7 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -122,7 +123,9 @@ public class RestAssuredExercises1Test {
         given().
                 spec(requestSpec).
                 when().
-
-                then();
+                get("/2014/circuits.json").
+                then()
+                .body("MRData.CircuitTable.season", is("2014"))
+                .and().body("MRData.CircuitTable.Circuits.circuitId.find {it.equals('nurburgring')}", nullValue());
     }
 }
