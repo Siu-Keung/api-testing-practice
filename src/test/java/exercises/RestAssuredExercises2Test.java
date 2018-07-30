@@ -1,11 +1,18 @@
 package exercises;
 
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.specification.Argument;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.*;
 
 
 public class RestAssuredExercises2Test {
@@ -30,6 +37,13 @@ public class RestAssuredExercises2Test {
 	 ******************************************************/
 
 	//todo
+    static Stream<Arguments> generateCheckCountryForCircuitParam(){
+        return Stream.of(
+                Arguments.of("monza", "Italy"),
+                Arguments.of("spa", "Belgium")
+        );
+    }
+
 
 	/*******************************************************
 	 * Use junit-jupiter-params for @ParameterizedTest that specifies for all races
@@ -45,14 +59,18 @@ public class RestAssuredExercises2Test {
 	 * is /circuits/monza.json)
 	 * and check the country this circuit can be found in
 	 ******************************************************/
-	
-	@Test
-	public void checkCountryForCircuit() {
+
+    @ParameterizedTest
+    @MethodSource("generateCheckCountryForCircuitParam")
+	public void checkCountryForCircuit(String circuitId, String country) {
 		
 		given().
 			spec(requestSpec).
 		when().
-		then();
+                get("/circuits/" + circuitId + ".json").
+		then().
+                body("MRData.CircuitTable.Circuits[0].Location.country", is(country)).log().all();
+
 	}
 	
 	/*******************************************************
