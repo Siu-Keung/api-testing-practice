@@ -1,6 +1,7 @@
 package exercises;
 
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.path.json.JsonPath;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,11 @@ public class RestAssuredExercises4Test {
     private static String accessToken;
 
     public static void retrieveOAuthToken() {
-
+        String responseBody =
+                given().spec(requestSpec).auth().preemptive().basic("oauth", "gimmeatoken").log().all()
+                .when()
+                .get("/oauth2/token").asString();
+        accessToken = JsonPath.from(responseBody).get("access_token");
     }
 
     /*******************************************************
